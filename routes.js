@@ -1,27 +1,20 @@
-const express = require('express');
-const routes = express.Router();
+const express = require('express')
+const routes = express.Router()
+const instructors = require('./instructors')
 
 routes.get("/", function(req, res) {
-    return res.redirect("/instructors")
+    return res.redirect("/instructors/1")
 })
 
-routes.get("/instructors", function(req, res) {
-    return res.render("instructors/index")
-})
-routes.post("/instructors", function(req, res) {
-
-    const keys = Object.keys(req.body)
-
-    for(key of keys){
-        if(req.body[key] == "")
-            return res.send(`O campo ${key} não pode ser vazio.`)
-    }
-
-    return res.send(req.body)
-})
 routes.get("/instructors/create", function(req, res) {
     return res.render("instructors/create")
 })
+
+routes.get("/instructors/:id", instructors.index)
+routes.get("/instructors/:id/edit", instructors.edit)
+routes.post("/instructors", instructors.create)
+
+
 
 
 routes.get("/members", function(req, res) {

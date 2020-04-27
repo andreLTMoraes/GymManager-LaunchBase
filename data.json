@@ -1,0 +1,13 @@
+{
+  "instructors": [
+    {
+      "id": 1,
+      "created_at": 1587750969900,
+      "avatar_url": "http://google.com",
+      "name": "Eu Moraes",
+      "birth": 644544000000,
+      "gender": "M",
+      "services": "calistenia, dança"
+    }
+  ]
+}

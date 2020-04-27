@@ -9,30 +9,31 @@
 
             <div class="item">
                 <div>Instrutor</div>
-                <div>Guilherme Saraiva</div>
+                <div>{{ instructor.name }}</div>
             </div>
 
             <div class="item">
                 <div>Idade</div>
-                <div>29</div>
+                <div>{{ instructor.age }}</div>
             </div>
 
             <div class="item">
                 <div>Sexo</div>
-                <div>Masculino</div>
+                <div>{{"Masculino" if instructor.gender == "M" else "Feminino"}}</div>
             </div>
 
             <div class="item">
                 <div>Acompanhamento</div>
                 <div>
-                    <span>Musculação</span>
-                    <span>CrossFit</span>
+                    {% for service in instructor.services %}
+                        <span>{{service}}</span>
+                    {% endfor %}
                 </div>
             </div>
 
             <div class="item">
                 <div>Desde</div>
-                <div>01/01/2020</div>
+                <div>{{ instructor.created_at }}</div>
             </div>
         </section>
     </div>
