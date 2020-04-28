@@ -17,6 +17,15 @@
       "birth": 674265600000,
       "gender": "F",
       "services": "Dança, Tabata"
+    },
+    {
+      "id": 3,
+      "created_at": 1588111889308,
+      "avatar_url": "http://google.com",
+      "name": "Ela Ribeiro",
+      "birth": 674265600000,
+      "gender": "F",
+      "services": "Dança, Tabata, HIIT"
     }
   ]
 }
