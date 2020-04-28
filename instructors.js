@@ -1,6 +1,6 @@
 const fs = require('fs')
 const data = require('./data.json')
-const utils = require("./utils")
+const {age, date} = require("./utils")
 
 
 exports.index = function(req, res) {
@@ -12,7 +12,7 @@ exports.index = function(req, res) {
 
     const instructor = {
         ...foundInstructor,
-        age: utils.age(foundInstructor.birth),
+        age: age(foundInstructor.birth),
         services: foundInstructor.services.split(","),
         created_at: new Intl.DateTimeFormat("pt-BR").format(foundInstructor.created_at)
     }
@@ -51,7 +51,7 @@ exports.create = function(req, res) {
     fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){
         if(err) return res.send("Erro ao salvar")
 
-        return res.redirect("/instructors")
+        return res.redirect(`/instructors/${id}`)
     })
 } 
 
@@ -63,6 +63,11 @@ exports.edit = function(req, res) {
     })
 
     if(!foundInstructor) return res.send("não encontrado")
+    
+    const instructor = {
+        ...foundInstructor,
+        birth: date(foundInstructor.birth)
+    }
 
-    return res.render("instructors/edit", { instructor: foundInstructor })
+    return res.render("instructors/edit", { instructor })
 }

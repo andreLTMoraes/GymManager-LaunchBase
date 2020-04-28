@@ -8,6 +8,15 @@
       "birth": 644544000000,
       "gender": "M",
       "services": "calistenia, dança"
+    },
+    {
+      "id": 2,
+      "created_at": 1588043187297,
+      "avatar_url": "http://google.com",
+      "name": "Ela Ribeiro",
+      "birth": 674265600000,
+      "gender": "F",
+      "services": "Dança, Tabata"
     }
   ]
 }
