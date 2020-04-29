@@ -99,3 +99,19 @@ exports.update = function (req, res) {
         return res.redirect(`/instructors/${id}`)
     })
 }
+
+exports.delete = function (req, res) {
+    const { id } = req.body
+
+    const filteredInstructors = data.instructors.filter(function(item) {
+        return item.id != id
+    })
+
+    data.instructors = filteredInstructors
+
+    fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){
+        if(err) return res.send("Fail to delete")
+
+        return res.redirect("/instructors")
+    })
+}
