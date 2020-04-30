@@ -19,7 +19,7 @@ exports.index = function(req, res) {
 
     if(!foundInstructor) return res.send("Instructor ot found!")
 
-    return res.render("instructors/index", { instructor })
+    return res.render("instructors/instructor", { instructor })
 }
 
 exports.create = function(req, res) {
@@ -88,7 +88,8 @@ exports.update = function (req, res) {
     const instructor = {
         ...foundInstructor,
         ...req.body,
-        birth: Date.parse(req.body.birth)
+        birth: Date.parse(req.body.birth),
+        id: Number(req.body.id)
     }
 
     data.instructors[index] = instructor
@@ -114,4 +115,8 @@ exports.delete = function (req, res) {
 
         return res.redirect("/instructors")
     })
+}
+
+exports.list = function (req, res) {
+    return res.render("instructors/index", { instructors: data.instructors })
 }

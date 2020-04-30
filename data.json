@@ -1,18 +1,18 @@
 {
   "instructors": [
     {
-      "id": "1",
+      "id": 1,
       "created_at": 1587750969900,
-      "avatar_url": "http://google.com",
+      "avatar_url": "https://i.ibb.co/T0VtSj7/perfilA.png",
       "name": "Eu Moraes",
       "birth": 644544000000,
       "gender": "M",
       "services": "calistenia, dança"
     },
     {
-      "id": "2",
+      "id": 2,
       "created_at": 1588043187297,
-      "avatar_url": "http://google.com",
+      "avatar_url": "https://i.ibb.co/V2mqcsL/perfilJ.png",
       "name": "Ela Ribeiro",
       "birth": 674265600000,
       "gender": "F",
