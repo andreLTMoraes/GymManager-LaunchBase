@@ -33,19 +33,21 @@ exports.post = function(req, res) {
             return res.send(`O campo ${key} não pode ser vazio.`)
     }
 
-    let {avatar_url, name, birth, gender} = req.body
+    let id = 1
+    const lastMember = data.members[data.members.length -1]
 
-    const id = Number(data.members.length + 1)
-    const created_at = Date.now()
-    birth = Date.parse(birth)
+    if(lastMember){
+        id = lastMember.id + 1
+    }
+    
+    
+    birth = Date.parse(req.body.birth)
 
 
     data.members.push({
         id,
-        avatar_url,
-        name,
-        birth,
-        gender
+        ...req.body,
+        birth
     })
 
     fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){

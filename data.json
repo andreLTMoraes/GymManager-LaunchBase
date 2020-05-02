@@ -1,5 +1,17 @@
 {
-  "members":[],
+  "members": [
+    {
+      "id": 1,
+      "avatar_url": "http://google.com",
+      "name": "André Moraes",
+      "email": "andre-moraes@email.com",
+      "birth": 660355200000,
+      "gender": "M",
+      "blood": "A1",
+      "weight": "64",
+      "height": "173"
+    }
+  ],
   "instructors": [
     {
       "id": 1,
