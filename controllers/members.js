@@ -1,6 +1,6 @@
 const fs = require('fs')
 const data = require('../data.json')
-const {age, date} = require("../utils")
+const {date} = require("../utils")
 
 
 exports.index = function(req, res) {
@@ -12,7 +12,7 @@ exports.index = function(req, res) {
 
     const member = {
         ...foundMember,
-        age: age(foundMember.birth)
+        birth: date(foundMember.birth).birthDay
     }
 
     if(!foundMember) return res.send("Member ot found!")
