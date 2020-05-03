@@ -2,7 +2,7 @@
   "members": [
     {
       "id": 1,
-      "avatar_url": "http://google.com",
+      "avatar_url": "https://i.ibb.co/T0VtSj7/perfilA.png",
       "name": "André Moraes",
       "email": "andremoraes@email.com",
       "birth": 660355200000,
@@ -10,6 +10,17 @@
       "blood": "A+",
       "weight": "64",
       "height": "173"
+    },
+    {
+      "id": 2,
+      "avatar_url": "https://i.ibb.co/V2mqcsL/perfilJ.png",
+      "name": "Jéssica Ribeiro",
+      "email": "jessicaribeiro@email.com",
+      "birth": 913680000000,
+      "gender": "F",
+      "blood": "A+",
+      "weight": "72",
+      "height": "156"
     }
   ],
   "instructors": [
