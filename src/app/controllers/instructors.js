@@ -1,25 +1,19 @@
-const fs = require('fs')
-const data = require('../../../data.json')
 const {age, date} = require("../lib/utils")
+const Instructor = require("../models/instructor")
 
 module.exports = {
     index(req, res) {
         const { id } = req.params
 
-        const foundInstructor = data.instructors.find(function(item) {
-            return item.id == id
+        Instructor.find(id, function(instructor){
+            if(!instructor) return res.send("Instructor not found")
+
+            instructor.age = age(instructor.birth),
+            instructor.services = instructor.services.split(","),
+            instructor.created_at = date(instructor.created_at).format
+
+            return res.render("instructors/instructor", { instructor })
         })
-
-        const instructor = {
-            ...foundInstructor,
-            age: age(foundInstructor.birth),
-            services: foundInstructor.services.split(","),
-            created_at: new Intl.DateTimeFormat("pt-BR").format(foundInstructor.created_at)
-        }
-
-        if(!foundInstructor) return res.send("Instructor ot found!")
-
-        return res.render("instructors/instructor", { instructor })
     },
 
     create(req, res) {
@@ -35,26 +29,16 @@ module.exports = {
                 return res.send(`O campo ${key} não pode ser vazio.`)
         }
 
-        let {avatar_url, name, birth, gender, services} = req.body
+        const values = [
+            req.body.name,
+            req.body.avatar_url,
+            req.body.gender,
+            req.body.services,
+            date(req.body.birth).iso,
+            date(Date.now()).iso
+        ]
 
-        const id = Number(data.instructors.length + 1)
-        const created_at = Date.now()
-        birth = Date.parse(birth)
-
-
-        data.instructors.push({
-            id,
-            created_at,
-            avatar_url,
-            name,
-            birth,
-            gender,
-            services
-        })
-
-        fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){
-            if(err) return res.send("Erro ao salvar")
-
+        Instructor.create(values, function(id){
             return res.redirect(`/instructors/${id}`)
         })
     }, 
@@ -62,66 +46,41 @@ module.exports = {
     edit(req, res) {
         const { id } = req.params
 
-        const foundInstructor = data.instructors.find(function(item){
-            return id == item.id
+        Instructor.find(id, function(instructor){
+            if(!instructor) return res.send("Instructor not found")
+
+            instructor.birth= date(instructor.birth).iso
+
+            return res.render("instructors/edit", { instructor })
         })
-
-        if(!foundInstructor) return res.send("não encontrado")
-        
-        const instructor = {
-            ...foundInstructor,
-            birth: date(foundInstructor.birth).iso
-        }
-
-        return res.render("instructors/edit", { instructor })
     },
 
     update(req, res) {
-        const { id } = req.body
-        let index = 0
 
-        const foundInstructor = data.instructors.find(function(item, foundIndex){
-            if(id == item.id){
-                index = foundIndex
-                return true
-            }
-        })
+        const values = [
+            req.body.id,
+            req.body.name,
+            req.body.avatar_url,
+            req.body.gender,
+            req.body.services,
+            date(req.body.birth).iso
+        ]
 
-        if(!foundInstructor) return res.send("não encontrado")
-        
-        const instructor = {
-            ...foundInstructor,
-            ...req.body,
-            birth: Date.parse(req.body.birth),
-            id: Number(req.body.id)
-        }
-
-        data.instructors[index] = instructor
-
-        fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){
-            if(err) return res.send("Write error.")
-
+        Instructor.update(values, function(id){
             return res.redirect(`/instructors/${id}`)
         })
     },
 
     delete(req, res) {
-        const { id } = req.body
-
-        const filteredInstructors = data.instructors.filter(function(item) {
-            return item.id != id
-        })
-
-        data.instructors = filteredInstructors
-
-        fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){
-            if(err) return res.send("Fail to delete")
-
+ 
+        Instructor.delete(req.body.id, function() {
             return res.redirect("/instructors")
         })
     },
 
     list(req, res) {
-        return res.render("instructors/index", { instructors: data.instructors })
+        Instructor.all(function(instructors){
+            return res.render("instructors/index", { instructors })
+        })
     }
 }

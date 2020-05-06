@@ -11,8 +11,6 @@ module.exports = {
             today.getDate() <= birthDate.getDate()){
                 age = age - 1
         }
-
-        console.log(age);
         
         return age
     },
@@ -28,7 +26,8 @@ module.exports = {
             month,
             year,
             iso: `${year}-${month}-${day}`,
-            birthDay: `${day}/${month}`
+            birthDay: `${day}/${month}`,
+            format: `${day}/${month}/${year}`
         }
     }
 }
