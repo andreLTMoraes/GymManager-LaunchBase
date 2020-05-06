@@ -1,23 +1,17 @@
-const fs = require('fs')
-const data = require('../../../data.json')
-const {date} = require("../lib/utils")
+const {age, date} = require("../lib/utils")
+const Member = require("../models/member")
 
 module.exports = {
     index(req, res) {
         const { id } = req.params
 
-        const foundMember = data.members.find(function(item) {
-            return item.id == id
+        Member.find(id, function(member){
+            if(!member) return res.send("Member not found")
+
+            member.birth = date(member.birth).birthDay
+
+            return res.render("members/member", { member })
         })
-
-        const member = {
-            ...foundMember,
-            birth: date(foundMember.birth).birthDay
-        }
-
-        if(!foundMember) return res.send("Member ot found!")
-
-        return res.render("members/member", { member })
     },
 
     create(req, res) {
@@ -33,93 +27,63 @@ module.exports = {
                 return res.send(`O campo ${key} não pode ser vazio.`)
         }
 
-        let id = 1
-        const lastMember = data.members[data.members.length -1]
+        const values = [
+            req.body.avatar_url,
+            req.body.name,
+            req.body.email,
+            date(req.body.birth).iso,
+            req.body.gender,
+            req.body.blood,
+            req.body.weight,
+            req.body.height
+        ]
 
-        if(lastMember){
-            id = lastMember.id + 1
-        }
-        
-        
-        birth = Date.parse(req.body.birth)
-
-
-        data.members.push({
-            id,
-            ...req.body,
-            birth
-        })
-
-        fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){
-            if(err) return res.send("Erro ao salvar")
-
+        Member.create(values, function(id){
             return res.redirect(`/members/${id}`)
         })
-    },
+    }, 
 
     edit(req, res) {
         const { id } = req.params
 
-        const foundMember = data.members.find(function(item){
-            return id == item.id
+        Member.find(id, function(member){
+            if(!member) return res.send("Member not found")
+
+            member.birth= date(member.birth).iso
+
+            return res.render("members/edit", { member })
         })
-
-        if(!foundMember) return res.send("não encontrado")
-        
-        const member = {
-            ...foundMember,
-            birth: date(foundMember.birth).iso
-        }
-
-        return res.render("members/edit", { member })
     },
 
     update(req, res) {
-        const { id } = req.body
-        let index = 0
 
-        const foundMember = data.members.find(function(item, foundIndex){
-            if(id == item.id){
-                index = foundIndex
-                return true
-            }
-        })
+        const values = [
+            req.body.id,
+            req.body.avatar_url,
+            req.body.name,
+            req.body.email,
+            date(req.body.birth).iso,
+            req.body.gender,
+            req.body.blood,
+            req.body.weight,
+            req.body.height
+        ]
 
-        if(!foundMember) return res.send("não encontrado")
-        
-        const member = {
-            ...foundMember,
-            ...req.body,
-            birth: Date.parse(req.body.birth),
-            id: Number(req.body.id)
-        }
-
-        data.members[index] = member
-
-        fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){
-            if(err) return res.send("Write error.")
-
+        Member.update(values, function(id){
             return res.redirect(`/members/${id}`)
         })
     },
 
     delete(req, res) {
-        const { id } = req.body
-
-        const filteredMembers = data.members.filter(function(item) {
-            return item.id != id
-        })
-
-        data.members = filteredMembers
-
-        fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err){
-            if(err) return res.send("Fail to delete")
-
+ 
+        Member.delete(req.body.id, function() {
             return res.redirect("/members")
         })
     },
 
     list(req, res) {
-        return res.render("members/index", { members: data.members })
-    },
+        Member.all(function(members){
+            return res.render("members/index", { members })
+        })
+    }
 }
