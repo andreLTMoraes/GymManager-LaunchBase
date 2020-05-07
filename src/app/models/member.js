@@ -3,14 +3,17 @@ const db = require('../../config/db')
 module.exports = {
     
     find(id, callback) {
-        db.query(`SELECT * FROM members WHERE id = ${id}`, function(err, result){
+        db.query(`SELECT members.*, instructors.name AS instructor_name
+            FROM members
+            LEFT JOIN instructors ON (members.instructor_id = instructors.id)
+            WHERE members.id = ${id}`, function(err, result){
             if(err) throw `Database error! ${err.message}`
 
             callback(result.rows[0])
         })
     },
     all(callback) {
-        db.query("SELECT * FROM members", function(err, result){
+        db.query("SELECT * FROM members ORDER BY name ASC", function(err, result){
             if(err) throw `Database error! ${err.message}`
 
             callback(result.rows)
@@ -26,8 +29,9 @@ module.exports = {
                 gender,
                 blood,
                 weight,
-                height
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                height,
+                instructor_id
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
             RETURNING id
         ` 
 
@@ -47,7 +51,8 @@ module.exports = {
             gender = ($6),
             blood = ($7),
             weight = ($8),
-            height = ($9)
+            height = ($9),
+            instructor_id = ($10)
             WHERE id=($1)
             RETURNING id
         `
@@ -62,6 +67,13 @@ module.exports = {
             if(err) throw `Database error! ${err.message}`
 
             callback()
+        })
+    },
+    instructorsSelectOptions(callback) {
+        db.query(`SELECT name, id FROM instructors`, function(err, result) {
+            if(err) throw `Database error! ${err.message}`
+
+            callback(result.rows)
         })
     }
 }
